@@ -70,3 +70,94 @@ oc describe node/worker-014 | grep pci
                     feature.node.kubernetes.io/pci-8086.sriov.capable=true
 ```
 
+# Check that the NVIDIA GPU Operator is installed and that all its pods are running
+
+```
+oc get pods -n  gpu-operator-resources
+NAME                                       READY   STATUS      RESTARTS   AGE
+gpu-feature-discovery-4wf55                1/1     Running     0          82d
+gpu-feature-discovery-6bfmw                1/1     Running     0          82d
+gpu-feature-discovery-j8462                1/1     Running     0          82d
+gpu-feature-discovery-mqvt9                1/1     Running     0          82d
+gpu-feature-discovery-x8r8l                1/1     Running     0          82d
+gpu-feature-discovery-xpkt7                1/1     Running     0          82d
+nvidia-container-toolkit-daemonset-55trn   1/1     Running     0          82d
+nvidia-container-toolkit-daemonset-bx7hr   1/1     Running     0          82d
+nvidia-container-toolkit-daemonset-npnsz   1/1     Running     0          82d
+nvidia-container-toolkit-daemonset-ssccc   1/1     Running     0          82d
+nvidia-container-toolkit-daemonset-vd6hf   1/1     Running     0          82d
+nvidia-container-toolkit-daemonset-vvkm6   1/1     Running     0          82d
+nvidia-cuda-validator-4rqhf                0/1     Completed   0          82d
+nvidia-cuda-validator-b9jgm                0/1     Completed   0          82d
+nvidia-cuda-validator-ml4zl                0/1     Completed   0          82d
+nvidia-cuda-validator-mld8q                0/1     Completed   0          82d
+nvidia-cuda-validator-n9bnd                0/1     Completed   0          82d
+nvidia-cuda-validator-w5pdw                0/1     Completed   0          82d
+nvidia-dcgm-5lhpv                          1/1     Running     0          82d
+nvidia-dcgm-6dftx                          1/1     Running     0          82d
+nvidia-dcgm-bldv7                          1/1     Running     0          82d
+nvidia-dcgm-exporter-fdpwq                 1/1     Running     0          82d
+nvidia-dcgm-exporter-gsgzw                 1/1     Running     0          82d
+nvidia-dcgm-exporter-h47gh                 1/1     Running     0          82d
+nvidia-dcgm-exporter-kkxf5                 1/1     Running     0          82d
+nvidia-dcgm-exporter-ngslr                 1/1     Running     0          82d
+nvidia-dcgm-exporter-pzjlg                 1/1     Running     0          82d
+nvidia-dcgm-hg25h                          1/1     Running     0          82d
+nvidia-dcgm-mlpxl                          1/1     Running     0          82d
+nvidia-dcgm-qwq5k                          1/1     Running     0          82d
+nvidia-device-plugin-daemonset-67mj8       1/1     Running     0          82d
+nvidia-device-plugin-daemonset-6nd8r       1/1     Running     0          82d
+nvidia-device-plugin-daemonset-bw8b5       1/1     Running     0          82d
+nvidia-device-plugin-daemonset-hfnzq       1/1     Running     0          82d
+nvidia-device-plugin-daemonset-qfrqs       1/1     Running     0          82d
+nvidia-device-plugin-daemonset-s5np4       1/1     Running     0          82d
+nvidia-device-plugin-validator-4qrzr       0/1     Completed   0          82d
+nvidia-device-plugin-validator-9zjx7       0/1     Completed   0          82d
+nvidia-device-plugin-validator-kn6w6       0/1     Completed   0          82d
+nvidia-device-plugin-validator-lfwhx       0/1     Completed   0          82d
+nvidia-device-plugin-validator-tkq72       0/1     Completed   0          82d
+nvidia-device-plugin-validator-xvl5f       0/1     Completed   0          82d
+nvidia-driver-daemonset-jhkhv              1/1     Running     0          82d
+nvidia-driver-daemonset-k8w6f              1/1     Running     0          82d
+nvidia-driver-daemonset-k9vwn              1/1     Running     0          82d
+nvidia-driver-daemonset-mlzkh              1/1     Running     0          82d
+nvidia-driver-daemonset-qpt26              1/1     Running     0          82d
+nvidia-driver-daemonset-s8l8s              1/1     Running     0          82d
+nvidia-node-status-exporter-69kd7          1/1     Running     0          197d
+nvidia-node-status-exporter-8bmw6          1/1     Running     0          197d
+nvidia-node-status-exporter-9kmfl          1/1     Running     0          243d
+nvidia-node-status-exporter-dfff6          1/1     Running     0          197d
+nvidia-node-status-exporter-dkmvm          1/1     Running     0          197d
+nvidia-node-status-exporter-qnhdg          1/1     Running     0          197d
+nvidia-operator-validator-2glm5            1/1     Running     0          82d
+nvidia-operator-validator-mfzts            1/1     Running     0          82d
+nvidia-operator-validator-p77wn            1/1     Running     0          82d
+nvidia-operator-validator-tggl5            1/1     Running     0          82d
+nvidia-operator-validator-vhz7q            1/1     Running     0          82d
+nvidia-operator-validator-wvm4r            1/1     Running     0          82d
+```
+
+# Check CUDA workload validation
+
+```
+oc logs nvidia-cuda-validator-4rqhf -n  gpu-operator-resources
+cuda workload validation is successful
+```
+
+# Check device-plugin workload validation
+
+```
+oc logs nvidia-device-plugin-validator-4qrzr -n  gpu-operator-resources
+device-plugin workload validation is successful
+```
+
+# Check all NVIDIA Operator validations
+
+```
+oc logs nvidia-operator-validator-wvm4r -n  gpu-operator-resources
+all validations are successful
+sh: line 1:     8 Terminated              sleep infinity
+all validations are successful
+```
+
+
