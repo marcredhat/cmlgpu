@@ -1,4 +1,4 @@
-#OpenShift Bare Metal provisioning with NVIDIA GPU
+# OpenShift Bare Metal provisioning with NVIDIA GPU
 
 <br>
 
