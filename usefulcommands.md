@@ -34,3 +34,25 @@ pcilib: sysfs_read_vpd: read failed: Input/output error
 		LnkSta:	Speed 8GT/s (ok), Width x4 (downgraded)
 ```
 
+
+```
+Step 1:Download this file from the paywall
+curl https://archive.cloudera.com/ml-runtimes/latest/artifacts/repo-assembly.json
+
+Step2: Extract the docker URLs
+cat repo-assembly.json| jq -r '.runtimes[].image_identifier'
+
+Step 3: Docker pull
+for i in $(jq -r '.runtimes[].image_identifier' repo-assembly.json); do docker pull ${i}; done;
+
+Step 4: Save to tar.gz
+docker save $(jq -r '.runtimes[].image_identifier' repo-assembly.json) -o runtime-images.tgz
+
+Step 5: Distribute to all nodes of the cluster
+Copy the runtime-images.tgz file to all the CDSW nodes.
+
+Step 6: Upload on all nodes of the cluster
+docker load -i /tmp/runtime-images.tgz
+```
+
+
