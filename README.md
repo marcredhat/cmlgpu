@@ -1,4 +1,4 @@
-# cmlgpu
+# Custom runtime with GPUs on CML Private Cloud 1.3.4
 
 Clean up existing images; the instructions below **delete all images** , make sure this is what you want
 
