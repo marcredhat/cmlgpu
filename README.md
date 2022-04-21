@@ -34,7 +34,8 @@ ML Runtime Metadata
 Some of the metadata is not overwritable
 ML_RUNTIME_EDITOR is overwritable - populates the Editor drop-down
 ML_RUNTIME_EDITION is overwritable and required - populates the Edition drop-down
-Recommended to change - cannot deploy an update ML Runtime with same metadata, there is some validation logic during the Add Runtime process
+Recommended to change - cannot deploy an update ML Runtime with same metadata, 
+there is some validation logic during the Add Runtime process
 ML_RUNTIME_DESCRIPTION
 ML_RUNTIME_SHORT_VERSION
 ML_RUNTIME_FULL_VERSION
