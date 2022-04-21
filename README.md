@@ -45,7 +45,7 @@ podman push 68f9494a07c docker-sandbox.infra.cloudera.com/mchisinevski/marcgpu:0
 
 <br>
 At Site Administration / Runtime / Engine,
-**ensure that Maximum GPUs per Session/Job is at least 1.**
+**ensure that Maximum GPUs per Session/Job is at least 1**
 
 ![This is an image](images/setmaxgpus.png)
 
