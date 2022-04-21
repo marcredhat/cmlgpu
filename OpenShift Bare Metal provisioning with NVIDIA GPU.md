@@ -160,4 +160,173 @@ sh: line 1:     8 Terminated              sleep infinity
 all validations are successful
 ```
 
+# Test the GPU in one nvidia-device-plugin-daemonset
 
+```
+oc exec -it   nvidia-device-plugin-daemonset-67mj8 -n gpu-operator-resources -- nvidia-smi
+Defaulted container "nvidia-device-plugin-ctr" out of: nvidia-device-plugin-ctr, toolkit-validation (init)
+Thu Apr 21 03:38:35 2022
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.57.02    Driver Version: 470.57.02    CUDA Version: 11.4     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  On   | 00000000:04:00.0 Off |                    0 |
+| N/A   32C    P0    25W / 250W |      0MiB / 12198MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla P100-PCIE...  On   | 00000000:82:00.0 Off |                    0 |
+| N/A   35C    P0    26W / 250W |      0MiB / 12198MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+```
+
+# TensorFlow benchmarks with GPU
+
+```
+cat << EOF > tensorflow-benchmarks-gpu.yaml
+apiVersion: v1
+kind: Pod 
+metadata:
+ name: tensorflow-benchmarks-gpu
+spec:
+ containers:
+ - image: nvcr.io/nvidia/tensorflow:19.09-py3
+   name: cudnn
+   command: ["/bin/sh","-c"]
+   args: ["git clone https://github.com/tensorflow/benchmarks.git;cd benchmarks/scripts/tf_cnn_benchmarks;python3 tf_cnn_benchmarks.py --num_gpus=1 --data_format=NHWC --batch_size=32 --model=resnet50 --variable_update=parameter_server"]
+   resources:
+    limits:
+      nvidia.com/gpu: 1
+    requests:
+      nvidia.com/gpu: 1
+ restartPolicy: Never
+EOF
+```
+
+```
+oc create -f tensorflow-benchmarks-gpu.yaml
+pod/tensorflow-benchmarks-gpu created
+```
+
+```
+oc logs tensorflow-benchmarks-gpu
+Cloning into 'benchmarks'...
+2022-04-21 03:44:13.055593: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.1
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/compat/v2_compat.py:61: disable_resource_variables (from tensorflow.python.ops.variable_scope) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+2022-04-21 03:44:16.259824: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2100005000 Hz
+2022-04-21 03:44:16.265678: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x468dba0 executing computations on platform Host. Devices:
+2022-04-21 03:44:16.265708: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2022-04-21 03:44:16.268132: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcuda.so.1
+2022-04-21 03:44:16.518836: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x46a2780 executing computations on platform CUDA. Devices:
+2022-04-21 03:44:16.518880: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Tesla P100-PCIE-12GB, Compute Capability 6.0
+2022-04-21 03:44:16.520017: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties:
+name: Tesla P100-PCIE-12GB major: 6 minor: 0 memoryClockRate(GHz): 1.3285
+pciBusID: 0000:82:00.0
+2022-04-21 03:44:16.520075: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.1
+2022-04-21 03:44:16.522413: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10
+2022-04-21 03:44:16.524734: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10
+2022-04-21 03:44:16.525653: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10
+2022-04-21 03:44:16.528056: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10
+2022-04-21 03:44:16.529370: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10
+2022-04-21 03:44:16.534400: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2022-04-21 03:44:16.536188: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+2022-04-21 03:44:16.536233: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.1
+2022-04-21 03:44:16.883078: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1181] Device interconnect StreamExecutor with strength 1 edge matrix:
+2022-04-21 03:44:16.883195: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1187]      0
+2022-04-21 03:44:16.883218: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1200] 0:   N
+2022-04-21 03:44:16.885308: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1326] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11275 MB memory) -> physical GPU (device: 0, name: Tesla P100-PCIE-12GB, pci bus id: 0000:82:00.0, compute capability: 6.0)
+WARNING:tensorflow:From /workspace/benchmarks/scripts/tf_cnn_benchmarks/convnet_builder.py:134: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+W0421 03:44:16.916622 139636022495040 deprecation.py:323] From /workspace/benchmarks/scripts/tf_cnn_benchmarks/convnet_builder.py:134: conv2d (from tensorflow.python.layers.convolutional) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.keras.layers.Conv2D` instead.
+WARNING:tensorflow:From /workspace/benchmarks/scripts/tf_cnn_benchmarks/convnet_builder.py:266: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+W0421 03:44:17.288227 139636022495040 deprecation.py:323] From /workspace/benchmarks/scripts/tf_cnn_benchmarks/convnet_builder.py:266: max_pooling2d (from tensorflow.python.layers.pooling) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.MaxPooling2D instead.
+WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/losses/losses_impl.py:121: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+W0421 03:44:19.779575 139636022495040 deprecation.py:323] From /usr/local/lib/python3.6/dist-packages/tensorflow/python/ops/losses/losses_impl.py:121: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+WARNING:tensorflow:From /workspace/benchmarks/scripts/tf_cnn_benchmarks/benchmark_cnn.py:2268: Supervisor.__init__ (from tensorflow.python.training.supervisor) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please switch to tf.train.MonitoredTrainingSession
+W0421 03:44:21.107485 139636022495040 deprecation.py:323] From /workspace/benchmarks/scripts/tf_cnn_benchmarks/benchmark_cnn.py:2268: Supervisor.__init__ (from tensorflow.python.training.supervisor) is deprecated and will be removed in a future version.
+Instructions for updating:
+Please switch to tf.train.MonitoredTrainingSession
+2022-04-21 03:44:21.567565: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties:
+name: Tesla P100-PCIE-12GB major: 6 minor: 0 memoryClockRate(GHz): 1.3285
+pciBusID: 0000:82:00.0
+2022-04-21 03:44:21.567664: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.1
+2022-04-21 03:44:21.567787: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10
+2022-04-21 03:44:21.567833: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10
+2022-04-21 03:44:21.567866: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10
+2022-04-21 03:44:21.567901: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10
+2022-04-21 03:44:21.567936: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10
+2022-04-21 03:44:21.567972: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2022-04-21 03:44:21.569652: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+2022-04-21 03:44:21.569750: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1181] Device interconnect StreamExecutor with strength 1 edge matrix:
+2022-04-21 03:44:21.569778: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1187]      0
+2022-04-21 03:44:21.569784: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1200] 0:   N
+2022-04-21 03:44:21.571428: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1326] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11275 MB memory) -> physical GPU (device: 0, name: Tesla P100-PCIE-12GB, pci bus id: 0000:82:00.0, compute capability: 6.0)
+2022-04-21 03:44:22.141431: W tensorflow/compiler/jit/mark_for_compilation_pass.cc:1412] (One-time warning): Not using XLA:CPU for cluster because envvar TF_XLA_FLAGS=--tf_xla_cpu_global_jit was not set.  If you want XLA:CPU, either set that envvar, or use experimental_jit_scope to enable XLA:CPU.  To confirm that XLA is active, pass --vmodule=xla_compilation_cache=1 (as a proper command-line flag, not via TF_XLA_FLAGS) or set the envvar XLA_FLAGS=--xla_hlo_profile.
+INFO:tensorflow:Running local_init_op.
+I0421 03:44:22.353680 139636022495040 session_manager.py:500] Running local_init_op.
+INFO:tensorflow:Done running local_init_op.
+I0421 03:44:22.414918 139636022495040 session_manager.py:502] Done running local_init_op.
+2022-04-21 03:44:23.995757: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10
+2022-04-21 03:44:24.181447: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+TensorFlow:  1.14
+Model:       resnet50
+Dataset:     imagenet (synthetic)
+Mode:        training
+SingleSess:  False
+Batch size:  32 global
+             32 per device
+Num batches: 100
+Num epochs:  0.00
+Devices:     ['/gpu:0']
+NUMA bind:   False
+Data format: NHWC
+Optimizer:   sgd
+Variables:   parameter_server
+==========
+Generating training model
+Initializing graph
+Running warm up
+Done warm up
+Step	Img/sec	total_loss
+1	images/sec: 180.2 +/- 0.0 (jitter = 0.0)	8.108
+10	images/sec: 181.0 +/- 0.1 (jitter = 0.2)	8.122
+20	images/sec: 180.6 +/- 0.1 (jitter = 0.4)	7.983
+30	images/sec: 180.2 +/- 0.3 (jitter = 0.8)	7.780
+40	images/sec: 180.2 +/- 0.2 (jitter = 0.8)	7.848
+50	images/sec: 180.2 +/- 0.2 (jitter = 0.7)	7.779
+60	images/sec: 180.2 +/- 0.1 (jitter = 0.5)	7.824
+70	images/sec: 180.2 +/- 0.2 (jitter = 0.5)	7.838
+80	images/sec: 180.2 +/- 0.2 (jitter = 0.5)	7.818
+90	images/sec: 180.3 +/- 0.1 (jitter = 0.5)	7.647
+100	images/sec: 180.4 +/- 0.1 (jitter = 0.5)	7.915
+----------------------------------------------------------------
+total images/sec: 180.26
+----------------------------------------------------------------
+```
+```
