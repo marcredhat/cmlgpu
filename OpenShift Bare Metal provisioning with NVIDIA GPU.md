@@ -9,7 +9,7 @@ https://access.redhat.com/documentation/en-us/openshift_container_platform/4.8/h
 
 # Checks - ensure that all the below pass before deploying and testing Cloudera Machine Learning
 
-## Node entitlement
+# Node entitlement
 
 ```
 oc get machineconfig | grep entitlement
