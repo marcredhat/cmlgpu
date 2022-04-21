@@ -60,7 +60,8 @@ At Site Administration / Runtime / Engine
 ![This is an image](images/addcustomruntimetoruntimecatalog.png)
 
 <br>
-Check that our custom runtime is available in the Runtime Catalog
+
+**Check that our custom runtime is available in the Runtime Catalog**
 
 ![This is an image](images/checkcustomruntimeincatalog.png)
 
