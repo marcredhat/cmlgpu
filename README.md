@@ -1,3 +1,9 @@
+# OpenShift Bare Metal provisioning with NVIDIA GPU and checks that should pass before deploying and testing Cloudera Machine Learning
+
+https://github.com/marcredhat/cmlgpu/blob/main/OpenShift%20Bare%20Metal%20provisioning%20with%20NVIDIA%20GPU.md
+
+<br>
+
 # Custom runtime with GPUs on CML Private Cloud 1.3.4
 
 Clean up existing images; the instructions below **delete all images** , make sure this is what you want
