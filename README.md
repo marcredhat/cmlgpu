@@ -1,6 +1,6 @@
 # OpenShift Bare Metal provisioning with NVIDIA GPU 
 
-# Checks that should pass before deploying and testing Cloudera Machine Learning
+# Prerequisite checks to run before deploying and testing Cloudera Machine Learning
 
 https://github.com/marcredhat/cmlgpu/blob/main/OpenShift%20Bare%20Metal%20provisioning%20with%20NVIDIA%20GPU.md
 
