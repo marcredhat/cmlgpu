@@ -1,6 +1,6 @@
 # cmlgpu
 
-Clean up existing images; the instructions below **all images** , make sure this is what you want
+Clean up existing images; the instructions below **delete all images** , make sure this is what you want
 
 ```
 #podman rmi $(podman images -qa) -f
