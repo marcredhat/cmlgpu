@@ -114,3 +114,7 @@ kubectl view-allocations | grep gpu -A 12
 <br>
 
 ![This is an image](images/viewgpuallocations.png)
+
+# Useful commands
+
+https://github.com/marcredhat/cmlgpu/blob/main/usefulcommands.md
