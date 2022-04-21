@@ -72,7 +72,6 @@ Check that the custom runtime is available to the CML project
 <br>
 Specify the number of GPUs required and start a CML session 
 
-<br>
 ![This is an image](images/startsession-specifygpu.png)
 
 <br>
@@ -93,4 +92,5 @@ kubectl view-allocations | grep gpu -A 6
 ```
 
 <br>
+
 ![This is an image](images/viewgpuallocations.png)
