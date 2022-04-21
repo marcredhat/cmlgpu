@@ -6,6 +6,8 @@
 ```
 
 Let's create a custom CML runtime based on docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-cuda:2021.12.1-b17
+
+<br>
 In the Dockerfile below, note that:
 - we also install install sklearn, tensorflow-gpu, keras and torch
 - we specify ENV ML_RUNTIME_EDITION="Marc GPU Workbench Edition" which is the name that will be displayed in CML
