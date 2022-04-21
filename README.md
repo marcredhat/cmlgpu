@@ -32,6 +32,8 @@ ENV ML_RUNTIME_EDITION="Marc GPU Workbench Edition" ML_RUNTIME_SHORT_VERSION="1"
 LABEL com.cloudera.ml.runtime.edition=$ML_RUNTIME_EDITION com.cloudera.ml.runtime.full-version=$ML_RUNTIME_FULL_VERSION com.cloudera.ml.runtime.short-version=$ML_RUNTIME_SHORT_VERSION com.cloudera.ml.runtime.maintenance-version=$ML_RUNTIME_MAINTENANCE_VERSION com.cloudera.ml.runtime.description=$ML_RUNTIME_DESCRIPTION
 ```
 
+Let's build an image using the above Dockerfile and push it to a repository.
+
 ```
 export TMPDIR="/home/tmp/buildah"
 buildah bud cdsw-julia.dockerfile
@@ -39,27 +41,44 @@ podman images
 podman push 68f9494a07c docker-sandbox.infra.cloudera.com/mchisinevski/marcgpu:0.2
 ```
 
+At Site Administration / Runtime / Engine,
+ensure that Maximum GPUs per Session/Job is at least 1.
 
 ![This is an image](images/setmaxgpus.png)
 
 
+Add our custom runtime to the Runtime Catalog
+
 ![This is an image](images/addcustomruntimetoruntimecatalog.png)
 
+
+Check that our custom runtime is available in the Runtime Catalog
 
 ![This is an image](images/checkcustomruntimeincatalog.png)
 
 
+Add the custom runtime to a CML project 
+
 ![This is an image](images/addcustomruntimetoproject.png)
 
 
+Check that the custom runtime is available to the CML project
+
 ![This is an image](images/checkcustomruntimeisavailabletoproject.png)
+
+Specify the number of GPUs required and start a CML session 
 
 ![This is an image](images/startsession-specifygpu.png)
 
+CML session
+
 ![This is an image](images/session.png)
 
+Use Tensorflow to list the GPUs available to our CML session/pod
 
 ![This is an image](images/tensorflowlistgpusfrompod.png)
+
+Use the view-allocations kubectl plugin
 
 ![This is an image](images/view-allocations-kubectl-plugin.png)
 
