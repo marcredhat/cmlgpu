@@ -38,3 +38,35 @@ oc create -f 0004-cluster-wide-entitled-pod.yaml
  
 oc logs cluster-entitled-build-pod
 ```
+
+# Check that Node feature discovery is installed and that we can find additionnal tags for each node
+
+```
+oc describe node/worker-014 | grep gpu
+                    nvidia.com/gpu.compute.major=6
+                    nvidia.com/gpu.compute.minor=0
+                    nvidia.com/gpu.count=2
+                    nvidia.com/gpu.deploy.container-toolkit=true
+                    nvidia.com/gpu.deploy.dcgm=true
+                    nvidia.com/gpu.deploy.dcgm-exporter=true
+                    nvidia.com/gpu.deploy.device-plugin=true
+                    nvidia.com/gpu.deploy.driver=true
+                    nvidia.com/gpu.deploy.gpu-feature-discovery=true
+                    nvidia.com/gpu.deploy.node-status-exporter=true
+                    nvidia.com/gpu.deploy.operator-validator=true
+                    nvidia.com/gpu.family=pascal
+                    nvidia.com/gpu.machine=PowerEdge-R730
+                    nvidia.com/gpu.memory=12198
+                    nvidia.com/gpu.present=true
+                    nvidia.com/gpu.product=Tesla-P100-PCIE-12GB
+```
+
+```
+oc describe node/worker-014 | grep pci
+                    feature.node.kubernetes.io/pci-102b.present=true
+                    feature.node.kubernetes.io/pci-10de.present=true
+                    feature.node.kubernetes.io/pci-14e4.present=true
+                    feature.node.kubernetes.io/pci-8086.present=true
+                    feature.node.kubernetes.io/pci-8086.sriov.capable=true
+```
+
