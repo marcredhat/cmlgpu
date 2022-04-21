@@ -5,7 +5,7 @@
 #podman system prune --all --force && podman rmi --all
 ```
 <br>
-Let's create a custom CML runtime based on docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-cuda:2021.12.1-b17
+Let's **create a custom CML runtime** based on docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-cuda:2021.12.1-b17
 
 In the Dockerfile below, note that:
 - we also install install sklearn, tensorflow-gpu, keras and torch
@@ -34,7 +34,7 @@ LABEL com.cloudera.ml.runtime.edition=$ML_RUNTIME_EDITION com.cloudera.ml.runtim
 ```
 
 <br>
-Let's build an image using the above Dockerfile and push it to a repository.
+Let's **build an image using the above Dockerfile and push it to a repository**.
 
 ```
 export TMPDIR="/home/tmp/buildah"
@@ -51,7 +51,8 @@ At Site Administration / Runtime / Engine
 ![This is an image](images/setmaxgpus.png)
 
 <br>
-Add our custom runtime to the Runtime Catalog
+
+**Add our custom runtime to the Runtime Catalog**
 
 ![This is an image](images/addcustomruntimetoruntimecatalog.png)
 
