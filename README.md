@@ -9,7 +9,7 @@
 Let's **create a custom CML runtime** based on docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-cuda:2021.12.1-b17
 
 In the Dockerfile below, note that:
-- we also install install sklearn, tensorflow-gpu, keras and torch
+- we also install install **sklearn, tensorflow-gpu, keras and torch**
 - we specify ENV ML_RUNTIME_EDITION="Marc GPU Workbench Edition" which is the name that will be displayed in CML
 
 <br>
@@ -63,32 +63,38 @@ Check that our custom runtime is available in the Runtime Catalog
 ![This is an image](images/checkcustomruntimeincatalog.png)
 
 <br>
-Add the custom runtime to a CML project 
+
+**Add the custom runtime to a CML project**
 
 ![This is an image](images/addcustomruntimetoproject.png)
 
 <br>
-Check that the custom runtime is available to the CML project
+
+**Check that the custom runtime is available to the CML project**
 
 ![This is an image](images/checkcustomruntimeisavailabletoproject.png)
 
 <br>
-Specify the number of GPUs required and start a CML session 
+
+**Specify the number of GPUs required and start a CML session**
 
 ![This is an image](images/startsession-specifygpu.png)
 
 <br>
-CML session
+
+**CML session:**
 
 ![This is an image](images/session.png)
 
 <br>
-Click on "Terminal access" then use Tensorflow to list the GPUs available to our CML session/pod
+
+Click on "Terminal access" then **use Tensorflow to list the GPUs available to our CML session/pod**
 
 ![This is an image](images/tensorflowlistgpusfrompod.png)
 
 <br>
-Use the view-allocations kubectl plugin
+
+**Use the view-allocations kubectl plugin**
 
 ```
 kubectl view-allocations | grep gpu -A 12
