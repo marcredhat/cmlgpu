@@ -7,7 +7,7 @@ https://egallen.com/openshift-baremetal-gpu/
 https://access.redhat.com/documentation/en-us/openshift_container_platform/4.8/html/installing/deploying-installer-provisioned-clusters-on-bare-metal
 
 
-# Checks
+# Checks - ensure that all the below pass before deploying and testing Cloudera Machine Learning
 
 ## Node entitlement
 
