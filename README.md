@@ -12,11 +12,9 @@ https://github.com/marcredhat/cmlgpu/blob/main/OpenShift%20Bare%20Metal%20provis
 # What you will need
 Access to https://archive.cloudera.com/ml-runtimes 
 
-<br> 
 
 Current runtimes are described here:
 
-<br>
 
 https://archive.cloudera.com/ml-runtimes/2021.09.2/artifacts/repo-assembly.json 
 
