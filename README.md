@@ -29,6 +29,7 @@ In the Dockerfile below, note that:
 - we also install install **sklearn, tensorflow-gpu, keras and torch**
 - we specify ENV ML_RUNTIME_EDITION="Marc GPU Workbench Edition" which is the name that will be displayed in CML
 
+```
 ML Runtime Metadata
 Some of the metadata is not overwritable
 ML_RUNTIME_EDITOR is overwritable - populates the Editor drop-down
@@ -38,6 +39,7 @@ ML_RUNTIME_DESCRIPTION
 ML_RUNTIME_SHORT_VERSION
 ML_RUNTIME_FULL_VERSION
 ML_RUNTIME_MAINTENANCE_VERSION
+```
 
 <br>
 
