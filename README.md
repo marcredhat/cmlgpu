@@ -5,6 +5,7 @@
 #podman system prune --all --force && podman rmi --all
 ```
 <br>
+
 Let's **create a custom CML runtime** based on docker.repository.cloudera.com/cloudera/cdsw/ml-runtime-workbench-python3.9-cuda:2021.12.1-b17
 
 In the Dockerfile below, note that:
