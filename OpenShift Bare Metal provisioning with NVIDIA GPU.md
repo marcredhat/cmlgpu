@@ -329,4 +329,57 @@ Step	Img/sec	total_loss
 total images/sec: 180.26
 ----------------------------------------------------------------
 ```
+
+# Test NGC UBI8 pod with CUDA running the nvidia-smi command
+
+NGC Catalog https://catalog.ngc.nvidia.com/ is a curated set of GPU-optimized software for AI, HPC and Visualization. 
+
 ```
+cat << EOF > nvidia-smi.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+ name: nvidia-smi
+spec:
+ containers:
+ - image: nvcr.io/nvidia/cuda:10.2-runtime-ubi8
+   name: nvidia-smi
+   command: [ nvidia-smi ]
+   resources:
+    limits:
+      nvidia.com/gpu: 1
+    requests:
+      nvidia.com/gpu: 1
+ restartPolicy: Never
+EOF
+```
+ 
+```
+oc create -f nvidia-smi.yaml
+pod/nvidia-smi created
+```
+
+```
+oc logs nvidia-smi
+Thu Apr 21 03:54:28 2022
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.57.02    Driver Version: 470.57.02    CUDA Version: 11.4     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla P100-PCIE...  On   | 00000000:04:00.0 Off |                    0 |
+| N/A   31C    P0    25W / 250W |      0MiB / 12198MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+```
+
