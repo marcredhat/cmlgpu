@@ -8,6 +8,13 @@ https://github.com/marcredhat/cmlgpu/blob/main/OpenShift%20Bare%20Metal%20provis
 
 # Custom runtime with GPUs on CML Private Cloud 1.3.4
 
+
+# What you will need
+Access to https://archive.cloudera.com/ml-runtimes 
+Current runtimes are described here:
+https://archive.cloudera.com/ml-runtimes/2021.09.2/artifacts/repo-assembly.json 
+
+
 Clean up existing images; the instructions below **delete all images** , make sure this is what you want
 
 ```
@@ -21,6 +28,16 @@ Let's **create a custom CML runtime** based on docker.repository.cloudera.com/cl
 In the Dockerfile below, note that:
 - we also install install **sklearn, tensorflow-gpu, keras and torch**
 - we specify ENV ML_RUNTIME_EDITION="Marc GPU Workbench Edition" which is the name that will be displayed in CML
+
+ML Runtime Metadata
+Some of the metadata is not overwritable
+ML_RUNTIME_EDITOR is overwritable - populates the Editor drop-down
+ML_RUNTIME_EDITION is overwritable and required - populates the Edition drop-down
+Recommended to change - cannot deploy an update ML Runtime with same metadata, there is some validation logic during the Add Runtime process
+ML_RUNTIME_DESCRIPTION
+ML_RUNTIME_SHORT_VERSION
+ML_RUNTIME_FULL_VERSION
+ML_RUNTIME_MAINTENANCE_VERSION
 
 <br>
 
