@@ -88,7 +88,7 @@ Click on "Terminal access" then use Tensorflow to list the GPUs available to our
 Use the view-allocations kubectl plugin
 
 ```
-kubectl view-allocations | grep gpu -A 6
+kubectl view-allocations | grep gpu -A 12
 ```
 
 <br>
