@@ -2,6 +2,15 @@
 # Useful commands
 
 
+```
+oc debug node/worker-014
+chroot /host
+lspci -vvv  > /tmp/lspci.txt
+```
+
+Sample output: https://github.com/marcredhat/cmlgpu/blob/main/lspci.txt
+
+
 If LnkSta (Link Status) is less than LnkCap (Link Capability), it will display (downgraded) next to the Width. 
 This means that the PCI card is capable of more than what the PCI slot can provide.
 
