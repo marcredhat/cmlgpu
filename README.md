@@ -69,7 +69,8 @@ LABEL com.cloudera.ml.runtime.edition=$ML_RUNTIME_EDITION com.cloudera.ml.runtim
 ```
 
 <br>
-Let's **build an image using the above Dockerfile and push it to a repository**
+
+Let's **build an image using the above Dockerfile and push it to a repository**.
 
 ```
 export TMPDIR="/home/tmp/buildah"
