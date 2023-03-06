@@ -74,7 +74,7 @@ Let's **build an image using the above Dockerfile and push it to a repository**.
 export TMPDIR="/home/tmp/buildah"
 buildah bud cdsw-julia.dockerfile
 podman images
-podman push 68f9494a07c docker-sandbox.infra.cloudera.com/mchisinevski/marcgpu:0.2
+[root@rhel91 cml]# podman push  f93d7b13a3df ip-10-0-1-85.us-west-2.compute.internal:9999/marccmlcudagpu:0.1
 ```
 
 <br>
