@@ -77,6 +77,22 @@ podman images
 [root@rhel91 cml]# podman push  f93d7b13a3df ip-10-0-1-85.us-west-2.compute.internal:9999/marccmlcudagpu:0.1
 ```
 
+Ensure that the private Nexus repo cert is trusted by OpenShift
+
+```
+[root@rhel91 ~]# openssl s_client -showcerts -connect full41.base.local:9999  < /dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > nexus41.crt
+depth=0 C = SG, ST = Unspecified, L = Unspecified, O = Sonatype, OU = Sonatype, CN = full41.base.local
+verify return:1
+DONE
+[root@rhel91 ~]# export KUBECONFIG=./kc
+[root@rhel91 ~]# oc create configmap nexus41 -n openshift-config --from-file=full41.base.local..9999=nexus41.crt
+configmap/nexus41 created
+[root@rhel91 ~]#   oc patch image.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"nexus41"}}}' --type=merge
+image.config.openshift.io/cluster patched
+```
+
+
+
 <br>
 
 At Site Administration / Runtime / Engine
